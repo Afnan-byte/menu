@@ -185,7 +185,7 @@ const AdminDashboard = ({ businessInfo, onLogout }) => {
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-xl">
               <Globe size={16} className="text-gray-400" />
-              <span className="text-sm font-bold text-gray-600">Live: {window.location.origin}</span>
+              <span className="text-sm font-bold text-gray-600">Menu URL: {window.location.origin}/menu/{businessInfo.id}</span>
             </div>
             <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-100">
                <img src={businessInfo.logo} className="w-full h-full object-cover" />
@@ -301,7 +301,7 @@ const AdminDashboard = ({ businessInfo, onLogout }) => {
               </div>
               <div className="flex flex-col items-center gap-10">
                 <div className="bg-gray-50 p-10 rounded-[48px] border-8 border-accent/5">
-                  <QRCodeSVG value={window.location.origin} size={250} fgColor={qrColor} includeMargin />
+                  <QRCodeSVG value={`${window.location.origin}/menu/${businessInfo.id}`} size={250} fgColor={qrColor} includeMargin />
                 </div>
                 <div className="w-full space-y-6">
                    <div className="flex flex-wrap gap-3 justify-center">
