@@ -78,7 +78,7 @@ function App() {
                   <Plus size={32} strokeWidth={3} />
                 </div>
                 <div>
-                  <h1 className="text-3xl font-black text-gray-900 leading-none tracking-tighter">Menuvo</h1>
+                  <h1 className="text-2xl md:text-3xl font-black text-gray-900 leading-none tracking-tighter">Menuvo</h1>
                   <p className="text-[10px] font-black text-accent uppercase tracking-[0.2em] mt-1">{restaurantInfo.name}</p>
                 </div>
               </div>

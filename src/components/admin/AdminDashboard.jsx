@@ -149,7 +149,10 @@ const AdminDashboard = ({ businessInfo, onLogout }) => {
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => {
+                  setActiveTab(item.id);
+                  if (window.innerWidth < 1024) setIsSidebarOpen(false);
+                }}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${
                   activeTab === item.id 
                   ? 'bg-accent text-primary shadow-lg shadow-accent/20' 
@@ -177,17 +180,23 @@ const AdminDashboard = ({ businessInfo, onLogout }) => {
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Top Bar */}
-        <header className="bg-white h-20 px-8 flex items-center justify-between border-b border-gray-100 flex-shrink-0">
+        <header className="bg-white h-20 px-4 md:px-8 flex items-center justify-between border-b border-gray-100 flex-shrink-0">
           <div className="flex items-center gap-4">
-            <h2 className="text-xl font-black text-gray-900 capitalize">{activeTab.replace('-', ' ')}</h2>
+            <button 
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="lg:hidden p-2 text-gray-400 hover:text-primary transition-colors"
+            >
+              <MenuIcon size={24} />
+            </button>
+            <h2 className="text-lg md:text-xl font-black text-gray-900 capitalize truncate">{activeTab.replace('-', ' ')}</h2>
           </div>
 
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-xl">
-              <Globe size={16} className="text-gray-400" />
-              <span className="text-sm font-bold text-gray-600">Menu URL: {window.location.origin}/menu/{businessInfo.id}</span>
+          <div className="flex items-center gap-3 md:gap-6">
+            <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-xl max-w-[200px] md:max-w-none">
+              <Globe size={16} className="text-gray-400 flex-shrink-0" />
+              <span className="text-sm font-bold text-gray-600 truncate">Menu: {businessInfo.id}</span>
             </div>
-            <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-100">
+            <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-100 flex-shrink-0">
                <img src={businessInfo.logo} className="w-full h-full object-cover" />
             </div>
           </div>
