@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useParams, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import MenuSection from './components/MenuSection';
 import ContactSection from './components/ContactSection';
@@ -29,7 +29,13 @@ function App() {
   const [activeCategory, setActiveCategory] = useState(categories[0]?.id || 'starters');
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedItem, setSelectedItem] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem('menuvo_authenticated') === 'true';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('menuvo_authenticated', isAuthenticated);
+  }, [isAuthenticated]);
   const [businessInfo, setBusinessInfo] = useState(() => {
     const saved = localStorage.getItem('menuvo_business');
     return saved ? JSON.parse(saved) : null;

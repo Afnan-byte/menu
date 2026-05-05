@@ -3,7 +3,7 @@ import {
   Plus, Edit2, Trash2, CheckCircle2, XCircle, Save, X, 
   Upload, QrCode, LogOut, Sparkles, Layout, Eye, 
   Download, Palette, Globe, Check, ChevronRight, 
-  TrendingUp, Users, ShoppingBag, Settings, Menu as MenuIcon,
+  TrendingUp, Users, ShoppingBag, Settings, Menu,
   Search, Bell, User
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
@@ -192,7 +192,7 @@ const AdminDashboard = ({ businessInfo, onLogout }) => {
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className={`w-full hidden lg:flex items-center px-4 py-3 rounded-xl font-bold text-gray-400 hover:text-white hover:bg-white/5 transition-all ${isSidebarOpen ? 'gap-3' : 'justify-center'}`}
             >
-              {isSidebarOpen ? <X size={20} /> : <MenuIcon size={20} />}
+              {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
               {isSidebarOpen && <span>Collapse</span>}
             </button>
             <button 
@@ -215,7 +215,7 @@ const AdminDashboard = ({ businessInfo, onLogout }) => {
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className="lg:hidden p-2 text-gray-400 hover:text-primary transition-colors"
             >
-              <MenuIcon size={24} />
+              <Menu size={24} />
             </button>
             <h2 className="text-lg md:text-xl font-black text-gray-900 capitalize truncate">{activeTab.replace('-', ' ')}</h2>
           </div>
