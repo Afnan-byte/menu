@@ -135,15 +135,35 @@ const AdminDashboard = ({ businessInfo, onLogout }) => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
+      {/* Backdrop for Mobile */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden animate-in fade-in duration-300"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside className={`fixed lg:sticky top-0 inset-y-0 left-0 z-50 bg-primary text-white transition-all duration-300 transform 
-        ${isSidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0 lg:w-20'} shadow-2xl lg:shadow-none`}>
+        ${isSidebarOpen ? 'translate-x-0 w-72' : '-translate-x-full lg:translate-x-0 lg:w-20'} shadow-2xl lg:shadow-none`}>
         <div className="flex flex-col h-full overflow-hidden">
-          <div className={`p-6 flex items-center ${isSidebarOpen ? 'gap-3' : 'justify-center'}`}>
-            <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center text-primary flex-shrink-0">
-              <Plus size={24} strokeWidth={3} />
+          <div className={`p-6 flex items-center justify-between ${isSidebarOpen ? '' : 'flex-col gap-4'}`}>
+            <div className={`flex items-center ${isSidebarOpen ? 'gap-3' : 'justify-center'}`}>
+              <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center text-primary flex-shrink-0">
+                <Plus size={24} strokeWidth={3} />
+              </div>
+              {isSidebarOpen && <span className="text-2xl font-black tracking-tighter">Menuvo</span>}
             </div>
-            {isSidebarOpen && <span className="text-2xl font-black tracking-tighter animate-in fade-in duration-500">Menuvo</span>}
+            
+            {/* Mobile Close Button */}
+            {isSidebarOpen && (
+              <button 
+                onClick={() => setIsSidebarOpen(false)}
+                className="lg:hidden p-2 text-white/50 hover:text-white transition-colors"
+              >
+                <X size={24} />
+              </button>
+            )}
           </div>
 
           <nav className="flex-1 px-4 py-4 space-y-2">
