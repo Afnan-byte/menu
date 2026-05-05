@@ -64,14 +64,15 @@ function App() {
     { id: 'spicy', label: 'Spicy', icon: <Flame size={14} /> },
   ];
 
-  const isAdminRoute = location.pathname.startsWith('/admin');
+  const isDashboardRoute = location.pathname.startsWith('/dashboard');
+  const isAuthRoute = ['/login', '/signup'].includes(location.pathname);
   const isMenuRoute = location.pathname.startsWith('/menu/');
   const isLandingRoute = location.pathname === '/';
 
   return (
     <div className="min-h-screen bg-background font-sans selection:bg-primary/10 text-gray-900">
-      {/* Dynamic Header - Hidden in Admin Dashboard and Landing Page */}
-      {!(isAdminRoute && isAuthenticated && businessInfo) && !isLandingRoute && (
+      {/* Dynamic Header - Hidden in Dashboard, Auth, and Landing Page */}
+      {!(isDashboardRoute && isAuthenticated && businessInfo) && !isLandingRoute && !isAuthRoute && !isMenuRoute && (
         <header className="sticky top-0 z-50 bg-white shadow-sm md:shadow-none transition-all">
           <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-6">
             <div className="flex justify-between items-center">
@@ -161,6 +162,38 @@ function App() {
 
       <main>
         <Routes>
+          <Route path="/" element={<LandingPage />} />
+          
+          <Route path="/signup" element={
+            <Onboarding onComplete={handleOnboardingComplete} />
+          } />
+
+          <Route path="/login" element={
+            !businessInfo ? <Navigate to="/signup" replace /> :
+            isAuthenticated ? <Navigate to="/dashboard" replace /> :
+            <AdminLogin 
+              correctPassword={businessInfo.password}
+              businessName={businessInfo.name}
+              onLogin={() => {
+                setIsAuthenticated(true);
+                navigate('/dashboard');
+              }} 
+              onCancel={() => navigate('/')} 
+            />
+          } />
+
+          <Route path="/dashboard" element={
+            !businessInfo ? <Navigate to="/signup" replace /> :
+            !isAuthenticated ? <Navigate to="/login" replace /> :
+            <AdminDashboard 
+              businessInfo={businessInfo}
+              onLogout={() => {
+                setIsAuthenticated(false);
+                navigate('/login');
+              }} 
+            />
+          } />
+
           <Route path="/menu/:id" element={
             <MenuSection 
               items={items}
@@ -172,33 +205,15 @@ function App() {
             />
           } />
           
-          <Route path="/admin" element={
-            !businessInfo ? (
-              <Onboarding onComplete={handleOnboardingComplete} />
-            ) : !isAuthenticated ? (
-              <AdminLogin 
-                correctPassword={businessInfo.password}
-                businessName={businessInfo.name}
-                onLogin={() => setIsAuthenticated(true)} 
-                onCancel={() => navigate(`/menu/${businessInfo.id || 'demo'}`)} 
-              />
-            ) : (
-              <AdminDashboard 
-                businessInfo={businessInfo}
-                onLogout={() => setIsAuthenticated(false)} 
-              />
-            )
-          } />
-
           <Route path="/info" element={<ContactSection restaurantInfo={restaurantInfo} />} />
           
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/admin" element={<Navigate to="/dashboard" replace />} />
           
           <Route path="*" element={
             <div className="py-20 text-center">
                <Utensils size={48} className="mx-auto text-gray-300 mb-4" />
                <h2 className="text-xl font-bold">404 - Page Not Found</h2>
-               <button onClick={() => navigate('/admin')} className="mt-4 text-primary font-bold">Go to Dashboard</button>
+               <button onClick={() => navigate('/')} className="mt-4 text-primary font-bold">Go to Home</button>
             </div>
           } />
         </Routes>
@@ -210,9 +225,9 @@ function App() {
         onClose={() => setSelectedItem(null)} 
       />
 
-      {!(isAdminRoute && isAuthenticated && businessInfo) && !isLandingRoute && !isMenuRoute && (
+      {!(isDashboardRoute && isAuthenticated && businessInfo) && !isLandingRoute && !isAuthRoute && !isMenuRoute && (
         <>
-          <BottomNav activeTab={isMenuRoute ? 'menu' : isAdminRoute ? 'admin' : 'info'} onTabChange={(id) => navigate(id === 'admin' ? '/admin' : id === 'info' ? '/info' : `/menu/${businessInfo?.id || 'demo'}`)} />
+          <BottomNav activeTab={isMenuRoute ? 'menu' : isDashboardRoute ? 'admin' : 'info'} onTabChange={(id) => navigate(id === 'admin' ? '/dashboard' : id === 'info' ? '/info' : `/menu/${businessInfo?.id || 'demo'}`)} />
           <FloatingActions />
         </>
       )}

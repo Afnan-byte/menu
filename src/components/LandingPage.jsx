@@ -22,13 +22,13 @@ const LandingPage = () => {
           </div>
           <div className="flex items-center gap-4">
             <button 
-              onClick={() => navigate('/admin')}
+              onClick={() => navigate('/login')}
               className="text-sm font-bold text-gray-500 hover:text-primary transition-colors px-4"
             >
               Login
             </button>
             <button 
-              onClick={() => navigate('/admin')}
+              onClick={() => navigate('/signup')}
               className="bg-primary text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-all"
             >
               Get Started
@@ -79,7 +79,7 @@ const LandingPage = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
           >
             <button 
-              onClick={() => navigate('/admin')}
+              onClick={() => navigate('/signup')}
               className="w-full sm:w-auto bg-primary text-white px-10 py-5 rounded-[2rem] text-xl font-black shadow-2xl shadow-primary/30 flex items-center justify-center gap-3 hover:scale-105 transition-all group"
             >
               Create Your Menu
