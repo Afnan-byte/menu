@@ -136,13 +136,14 @@ const AdminDashboard = ({ businessInfo, onLogout }) => {
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-primary text-white transition-transform duration-300 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0`}>
-        <div className="flex flex-col h-full">
-          <div className="p-6 flex items-center gap-3">
-            <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center text-primary">
+      <aside className={`fixed lg:sticky top-0 inset-y-0 left-0 z-50 bg-primary text-white transition-all duration-300 transform 
+        ${isSidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0 lg:w-20'} shadow-2xl lg:shadow-none`}>
+        <div className="flex flex-col h-full overflow-hidden">
+          <div className={`p-6 flex items-center ${isSidebarOpen ? 'gap-3' : 'justify-center'}`}>
+            <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center text-primary flex-shrink-0">
               <Plus size={24} strokeWidth={3} />
             </div>
-            <span className="text-2xl font-black tracking-tighter">Menuvo</span>
+            {isSidebarOpen && <span className="text-2xl font-black tracking-tighter animate-in fade-in duration-500">Menuvo</span>}
           </div>
 
           <nav className="flex-1 px-4 py-4 space-y-2">
@@ -153,25 +154,33 @@ const AdminDashboard = ({ businessInfo, onLogout }) => {
                   setActiveTab(item.id);
                   if (window.innerWidth < 1024) setIsSidebarOpen(false);
                 }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${
+                className={`w-full flex items-center px-4 py-3 rounded-xl font-bold transition-all ${isSidebarOpen ? 'gap-3' : 'justify-center'} ${
                   activeTab === item.id 
                   ? 'bg-accent text-primary shadow-lg shadow-accent/20' 
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }`}
+                title={!isSidebarOpen ? item.label : ''}
               >
-                <item.icon size={20} />
-                {item.label}
+                <item.icon size={20} className="flex-shrink-0" />
+                {isSidebarOpen && <span className="animate-in fade-in slide-in-from-left-2 duration-300">{item.label}</span>}
               </button>
             ))}
           </nav>
 
-          <div className="p-4 border-t border-white/10">
+          <div className="p-4 border-t border-white/10 space-y-2">
+            <button 
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className={`w-full hidden lg:flex items-center px-4 py-3 rounded-xl font-bold text-gray-400 hover:text-white hover:bg-white/5 transition-all ${isSidebarOpen ? 'gap-3' : 'justify-center'}`}
+            >
+              {isSidebarOpen ? <X size={20} /> : <MenuIcon size={20} />}
+              {isSidebarOpen && <span>Collapse</span>}
+            </button>
             <button 
               onClick={onLogout}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-gray-400 hover:text-red-400 hover:bg-red-400/5 transition-all"
+              className={`w-full flex items-center px-4 py-3 rounded-xl font-bold text-gray-400 hover:text-red-400 hover:bg-red-400/5 transition-all ${isSidebarOpen ? 'gap-3' : 'justify-center'}`}
             >
-              <LogOut size={20} />
-              Sign Out
+              <LogOut size={20} className="flex-shrink-0" />
+              {isSidebarOpen && <span>Sign Out</span>}
             </button>
           </div>
         </div>
