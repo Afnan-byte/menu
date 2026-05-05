@@ -8,6 +8,7 @@ import FloatingActions from './components/FloatingActions';
 import AdminDashboard from './components/admin/AdminDashboard';
 import AdminLogin from './components/admin/AdminLogin';
 import Onboarding from './components/admin/Onboarding';
+import LandingPage from './components/LandingPage';
 
 import { Search, Filter, Utensils, Languages, Flame, Lock, Settings, ChevronDown, Plus } from 'lucide-react';
 import { restaurantInfo as defaultInfo, categories as initialCategories, menuItems as initialItems } from './data/menu';
@@ -65,11 +66,12 @@ function App() {
 
   const isAdminRoute = location.pathname.startsWith('/admin');
   const isMenuRoute = location.pathname.startsWith('/menu/');
+  const isLandingRoute = location.pathname === '/';
 
   return (
     <div className="min-h-screen bg-background font-sans selection:bg-primary/10 text-gray-900">
-      {/* Dynamic Header - Hidden in Admin Dashboard */}
-      {!(isAdminRoute && isAuthenticated && businessInfo) && (
+      {/* Dynamic Header - Hidden in Admin Dashboard and Landing Page */}
+      {!(isAdminRoute && isAuthenticated && businessInfo) && !isLandingRoute && (
         <header className="sticky top-0 z-50 bg-white shadow-sm md:shadow-none transition-all">
           <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-6">
             <div className="flex justify-between items-center">
@@ -82,15 +84,17 @@ function App() {
                   <p className="text-[10px] font-black text-accent uppercase tracking-[0.2em] mt-1">{restaurantInfo.name}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <button 
-                  onClick={() => navigate('/admin')}
-                  className="p-3 bg-gray-50 text-gray-400 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors"
-                  title="Admin Access"
-                >
-                  <Lock size={16} />
-                </button>
-              </div>
+              {!isMenuRoute && (
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={() => navigate('/admin')}
+                    className="p-3 bg-gray-50 text-gray-400 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors"
+                    title="Admin Access"
+                  >
+                    <Lock size={16} />
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Search & Filters - Only visible on Menu tab */}
@@ -174,6 +178,7 @@ function App() {
             ) : !isAuthenticated ? (
               <AdminLogin 
                 correctPassword={businessInfo.password}
+                businessName={businessInfo.name}
                 onLogin={() => setIsAuthenticated(true)} 
                 onCancel={() => navigate(`/menu/${businessInfo.id || 'demo'}`)} 
               />
@@ -187,11 +192,7 @@ function App() {
 
           <Route path="/info" element={<ContactSection restaurantInfo={restaurantInfo} />} />
           
-          <Route path="/" element={
-            businessInfo 
-              ? <Navigate to={`/menu/${businessInfo.id}`} replace /> 
-              : <Onboarding onComplete={handleOnboardingComplete} />
-          } />
+          <Route path="/" element={<LandingPage />} />
           
           <Route path="*" element={
             <div className="py-20 text-center">
@@ -209,7 +210,7 @@ function App() {
         onClose={() => setSelectedItem(null)} 
       />
 
-      {!(isAdminRoute && isAuthenticated && businessInfo) && (
+      {!(isAdminRoute && isAuthenticated && businessInfo) && !isLandingRoute && !isMenuRoute && (
         <>
           <BottomNav activeTab={isMenuRoute ? 'menu' : isAdminRoute ? 'admin' : 'info'} onTabChange={(id) => navigate(id === 'admin' ? '/admin' : id === 'info' ? '/info' : `/menu/${businessInfo?.id || 'demo'}`)} />
           <FloatingActions />
